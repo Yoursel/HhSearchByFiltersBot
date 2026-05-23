@@ -1,0 +1,50 @@
+# Build output
+bin/
+obj/
+artifacts/
+
+# User and IDE files
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.DotSettings.user
+
+# Rider/ReSharper caches
+_ReSharper*/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+
+# Local app state
+sent-vacancies.json
+data/
+logs/
+
+# Local secrets and environment files
+*.env
+.env
+.env.*
+secrets.json
+appsettings.Local.json
+appsettings.*.local.json
+
+# Test and coverage output
+TestResults/
+coverage/
+*.coverage
+*.coveragexml
+coverage.cobertura.xml
+
+# NuGet
+*.nupkg
+*.snupkg
+packages/
+
+# OS files
+Thumbs.db
+Desktop.ini
+.DS_Store
