@@ -16,11 +16,35 @@ public class HhVacancyClient(HttpClient httpClient,
     
     public async Task<IReadOnlyList<Domain.Vacancy>> SearchAsync(SearchOptions searchOptions, CancellationToken cancellationToken)
     {
-        var text = string.Join(" ", searchOptions.Keywords.Concat(searchOptions.SkillKeywords));
-        
+        var searchTexts = searchOptions.Keywords.Length > 0
+            ? searchOptions.Keywords
+            : searchOptions.SkillKeywords;
+
+        var vacanciesById = new Dictionary<string, Domain.Vacancy>();
+
+        foreach (var searchText in searchTexts
+                     .Where(text => !string.IsNullOrWhiteSpace(text))
+                     .Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            var vacancies = await SearchSingleTextAsync(searchText, searchOptions, cancellationToken);
+
+            foreach (var vacancy in vacancies)
+            {
+                vacanciesById.TryAdd(vacancy.Id, vacancy);
+            }
+        }
+
+        return vacanciesById.Values.ToList();
+    }
+
+    private async Task<IReadOnlyList<Domain.Vacancy>> SearchSingleTextAsync(
+        string searchText,
+        SearchOptions searchOptions,
+        CancellationToken cancellationToken)
+    {
         var parameters = new List<KeyValuePair<string, string>>
         {
-            new("text", text),
+            new("text", searchText),
             new("date_from", searchOptions.PublishedFrom.ToString("yyyy-MM-dd")),
             new("per_page", searchOptions.MaxVacanciesPerRun.ToString())
         };
@@ -35,13 +59,6 @@ public class HhVacancyClient(HttpClient httpClient,
 
         if (workFormat is not null)
             parameters.Add(new("work_format", workFormat));
-
-        if (searchOptions.ExcludeKeywords.Length > 0)
-        {
-            parameters.Add(new(
-                "excluded_text",
-                string.Join(",", searchOptions.ExcludeKeywords)));
-        }
         
         parameters.AddRange(searchOptions.ExperienceIds.Select(experience => new KeyValuePair<string, string>("experience", experience)));
         parameters.AddRange(searchOptions.AreaIds.Select(area => new KeyValuePair<string, string>("area", area)));
@@ -81,7 +98,7 @@ public class HhVacancyClient(HttpClient httpClient,
             return [];
         }
         
-        var vacancies = searchResponse.Items
+        return searchResponse.Items
             .Where(item =>
                 !string.IsNullOrWhiteSpace(item.Id) &&
                 !string.IsNullOrWhiteSpace(item.Name) &&
@@ -93,7 +110,5 @@ public class HhVacancyClient(HttpClient httpClient,
                 item.AlternateUrl!,
                 DateTimeParser.ParseNullable(item.PublishedAt)))
             .ToList();
-
-        return vacancies;
     }
 }

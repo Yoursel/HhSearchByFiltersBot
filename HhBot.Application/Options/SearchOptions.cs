@@ -6,6 +6,7 @@ public class SearchOptions
 
     public string[] Keywords { get; init; } = [];
     public string[] SkillKeywords { get; init; } = [];
+    public string[] IncludeKeywords { get; init; } = [];
     public string[] AreaIds { get; init; } = [];
     public required string WorkMode { get; init; }
     public string[] ExperienceIds { get; init; } = [];
@@ -14,4 +15,5 @@ public class SearchOptions
     public int MaxVacanciesPerRun { get; init; } = 10;
     public string[] ExcludeKeywords { get; init; } = [];
 }
+
 

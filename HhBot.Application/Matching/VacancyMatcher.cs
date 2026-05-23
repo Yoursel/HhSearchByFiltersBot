@@ -29,7 +29,20 @@ public sealed class VacancyMatcher
             }
         }
 
+        if (options.IncludeKeywords.Length > 0 && !HasAnyKeyword(text, options.IncludeKeywords))
+        {
+            rejectReason = "No required include keyword matched";
+            return false;
+        }
+
         rejectReason = null;
         return true;
+    }
+
+    private static bool HasAnyKeyword(string text, IEnumerable<string> keywords)
+    {
+        return keywords.Any(keyword =>
+            !string.IsNullOrWhiteSpace(keyword) &&
+            text.Contains(keyword, StringComparison.OrdinalIgnoreCase));
     }
 }
