@@ -18,14 +18,15 @@ Telegram-бот для мониторинга вакансий на hh.ru по �
   },
   "Search": {
     "Keywords": ["C#", ".NET", "ASP.NET Core"],
-    "SkillKeywords": ["SQL", "REST API"],
+    "SkillKeywords": ["SQL", "REST API", "Oracle", "NHibernate"],
+    "IncludeKeywords": ["C#", "Csharp", "C Sharp", ".NET", "ASP.NET", "ASP.NET Core", "DotNet", "Dot Net"],
     "AreaIds": [],
     "WorkMode": "Remote",
     "ExperienceIds": ["between1And3", "between3And6"],
-    "PublishedFrom": "2026-05-20",
+    "PublishedFrom": "2026-05-01",
     "CheckIntervalMinutes": 60,
-    "MaxVacanciesPerRun": 10,
-    "ExcludeKeywords": ["1C", "PHP", "Bitrix", "WordPress", "Unity", "GameDev", "Frontend", "QA"]
+    "MaxVacanciesPerRun": 20,
+    "ExcludeKeywords": ["1C", "PHP", "Bitrix", "WordPress", "Unity", "GameDev", "Python", "Django", "FastAPI", "Java", "Spring", "Go", "Golang", "Node.js", "NodeJS", "QA"]
   },
   "Persistence": {
     "SentVacanciesFilePath": "sent-vacancies.json"
@@ -175,6 +176,7 @@ sent-vacancies.json
 - Для ограничения даты публикации используется `date_from`.
 - `period` не используется вместе с `date_from`.
 - Для `Remote`, `Office`, `Hybrid` в HH отправляется параметр `work_format`.
-- `ExcludeKeywords` отправляются в HH через `excluded_text`.
-- Дополнительно вакансии фильтруются локально через `VacancyMatcher`.
+- `Keywords` используются для поиска вакансий в HH.
+- `IncludeKeywords` используются локально: вакансия должна содержать хотя бы одно из этих слов в названии, компании или описании.
+- `ExcludeKeywords` используются локально: если вакансия содержит одно из этих слов, она отклоняется.
 - Вакансия сохраняется как обработанная только после успешной отправки в Telegram.
