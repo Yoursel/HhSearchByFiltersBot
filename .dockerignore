@@ -1,0 +1,13 @@
+.git
+.vs
+.idea
+**/bin
+**/obj
+artifacts
+data
+logs
+sent-vacancies.json
+*.env
+.env
+.env.*
+README.md

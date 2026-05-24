@@ -1,0 +1,18 @@
+services:
+  hhbot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: hhbot
+    restart: unless-stopped
+    environment:
+      DOTNET_ENVIRONMENT: Production
+      Telegram__BotToken: ${TELEGRAM_BOT_TOKEN}
+      Telegram__ChatId: ${TELEGRAM_CHAT_ID}
+      Hh__ClientId: ${HH_CLIENT_ID}
+      Hh__ClientSecret: ${HH_CLIENT_SECRET}
+      Hh__AccessToken: ${HH_ACCESS_TOKEN}
+      Hh__UserAgent: ${HH_USER_AGENT}
+      Persistence__SentVacanciesFilePath: /data/sent-vacancies.json
+    volumes:
+      - ./data:/data
