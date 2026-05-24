@@ -46,6 +46,7 @@ public class HhVacancyClient(HttpClient httpClient,
         {
             new("text", searchText),
             new("date_from", searchOptions.PublishedFrom.ToString("yyyy-MM-dd")),
+            new("order_by", "publication_time"),
             new("per_page", searchOptions.MaxVacanciesPerRun.ToString())
         };
         

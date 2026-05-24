@@ -22,7 +22,7 @@ public sealed class VacancyMatcher
             if (string.IsNullOrWhiteSpace(keyword))
                 continue;
 
-            if (text.Contains(keyword, StringComparison.OrdinalIgnoreCase))
+            if (ContainsKeyword(text, keyword))
             {
                 rejectReason = $"Matched exclude keyword: {keyword}";
                 return false;
@@ -43,6 +43,46 @@ public sealed class VacancyMatcher
     {
         return keywords.Any(keyword =>
             !string.IsNullOrWhiteSpace(keyword) &&
-            text.Contains(keyword, StringComparison.OrdinalIgnoreCase));
+            ContainsKeyword(text, keyword));
+    }
+
+    private static bool ContainsKeyword(string text, string keyword)
+    {
+        var trimmedKeyword = keyword.Trim();
+        var startIndex = 0;
+
+        while (startIndex < text.Length)
+        {
+            var matchIndex = text.IndexOf(
+                trimmedKeyword,
+                startIndex,
+                StringComparison.OrdinalIgnoreCase);
+
+            if (matchIndex < 0)
+                return false;
+
+            var beforeIndex = matchIndex - 1;
+            var afterIndex = matchIndex + trimmedKeyword.Length;
+
+            if (IsKeywordBoundary(text, beforeIndex) &&
+                IsKeywordBoundary(text, afterIndex))
+            {
+                return true;
+            }
+
+            startIndex = matchIndex + trimmedKeyword.Length;
+        }
+
+        return false;
+    }
+
+    private static bool IsKeywordBoundary(string text, int index)
+    {
+        if (index < 0 || index >= text.Length)
+            return true;
+
+        var character = text[index];
+
+        return !char.IsLetterOrDigit(character) && character != '#';
     }
 }
