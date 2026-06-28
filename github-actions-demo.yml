@@ -20,10 +20,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Setup .NET
-        uses: actions/setup-dotnet@v5
+        uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "10.0.x"
 
@@ -36,12 +36,6 @@ jobs:
       - name: Publish
         run: dotnet publish HhBot/HhBot.csproj --configuration Release --no-restore --output ./artifacts/publish
 
-      - name: Upload publish artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: hhbot-publish
-          path: ./artifacts/publish
-
   docker:
     name: Build Docker image
     runs-on: ubuntu-latest
@@ -50,7 +44,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       - name: Build Docker image
         run: docker build --file Dockerfile --tag hhbot:${{ github.sha }} .
